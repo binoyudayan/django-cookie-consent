@@ -11,11 +11,13 @@ except ImportError:
 
 
 CACHE_KEY = 'cookie_consent_cache'
+CACHE_ALL_GROUPS = 'cookie_consent_all_groups'
 CACHE_TIMEOUT = 60 * 60
 
 
 def delete_cache():
     cache.delete(CACHE_KEY)
+    cache.delete(CACHE_ALL_GROUPS)
 
 
 def all_cookie_groups():
@@ -26,6 +28,17 @@ def all_cookie_groups():
         qs = qs.prefetch_related('cookie_set')
         items = dict([(g.varname, g) for g in qs])
         cache.set(CACHE_KEY, items, CACHE_TIMEOUT)
+    return items
+
+
+def cache_all_cookie_groups():
+    items = cache.get(CACHE_ALL_GROUPS)
+    if items is None:
+        from cookie_consent.models import CookieGroup
+        qs = CookieGroup.objects.filter()
+        qs = qs.prefetch_related('cookie_set')
+        items = dict([(g.varname, g) for g in qs])
+        cache.set(CACHE_ALL_GROUPS, items, CACHE_TIMEOUT)
     return items
 
 

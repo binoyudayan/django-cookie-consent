@@ -9,7 +9,8 @@ from django.utils.encoding import smart_str
 from cookie_consent.cache import (
     get_cookie_group,
     all_cookie_groups,
-    get_cookie,
+    get_cookie, 
+    cache_all_cookie_groups
 )
 from cookie_consent.models import (
     ACTION_ACCEPTED,
@@ -185,3 +186,8 @@ def get_accepted_cookies(request):
             if version >= cookie.get_version():
                 accepted_cookies.append(cookie)
     return accepted_cookies
+
+
+def get_all_cookie_groups():
+    return cache_all_cookie_groups()
+

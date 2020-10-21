@@ -15,6 +15,7 @@ from cookie_consent.util import (
     are_all_cookies_accepted,
     get_not_accepted_or_declined_cookie_groups,
     is_cookie_consent_enabled,
+    get_all_cookie_groups
 )
 from cookie_consent.conf import settings
 
@@ -147,3 +148,8 @@ def accepted_cookies(request):
         {{ request|accepted_cookies }}
     """
     return [c.varname for c in get_accepted_cookies(request)]
+
+
+@register.simple_tag
+def all_cookie_groups():
+    return get_all_cookie_groups()
